@@ -16,14 +16,72 @@ sixdig_pass = str(random.randint(100000, 999999))
 
 # Database screen
 def screen2():
+    def search_img():
+        print("")
+    def search_name():
+        print("")
+    def new_report():
+        def submit_missingreport(): #upon clicking submit
+            print("")
+        # This is the section of code which creates a button
+        tk.Button(sc2, text='SEARCH BASED ON IMAGE', bg='#00FFFF', font=('courier', 12, 'normal'),
+               command=search_name).place(x=47, y=247)
+
+        # This is the section of code which creates a button
+        tk.Button(sc2, text='SEARCH BASED ON NAME', bg='#00FFFF', font=('courier', 12, 'normal'),
+               command=search_name).place(x=357, y=247)
+
+        # This is the section of code which creates a button
+        tk.Button(sc2, text='FILE NEW REPORT', bg='#00FFFF', font=('courier', 12, 'normal'), command=new_report).place(
+            x=667, y=247)
+
+        # This is the section of code which creates a text input box
+        NAME = tk.Entry(sc2)
+        NAME.place(x=397, y=367)
+
+        # This is the section of code which creates a text input box
+        lastseen = tk.Entry(sc2)
+        lastseen.place(x=397, y=407)
+
+        # This is the section of code which creates a text input box
+        contacts = tk.Entry(sc2)
+        contacts.place(x=397, y=487)
+
+        # This is the section of code which creates a text input box
+        info = tk.Entry(sc2)
+        info.place(x=397, y=527)
+
+        # This is the section of code which creates the a Label
+        tk.Label(sc2, text='FULL NAME', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=297, y=367)
+
+        # This is the section of code which creates the a Label
+        tk.Label(sc2, text='LAST SEEN', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=297, y=407)
+
+        # This is the section of code which creates the a Label
+        tk.Label(sc2, text='PICTURE', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=307, y=447)
+
+        # This is the section of code which creates the a Label
+        tk.Label(sc2, text='CONTACT(S)', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=287, y=487)
+
+        # This is the section of code which creates the a Label
+        tk.Label(sc2, text='ADDITIONAL DETAILS', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=207, y=527)
+        tk.Button(sc2, text='SUBMIT', bg='#7FFFD4', font=('verdana', 15, 'normal'), command=submit_missingreport).place(
+            x=642, y=327)
+
     sc2 = tk.Tk()
-    welcome.destroy()
+    #welcome.destroy()
     sc2.title("Database Section")
-    sc2.state("zoomed")
+    sc2.geometry('888x584')
+    sc2.configure(background='#F0F8FF')
     l1 = tk.Label(sc2, text="Tamilnadu Police Data Management System", font=font_head, foreground="Blue", width=1280)
     l1.pack()
     l4 = tk.Label(sc2, text="CRIMINAL SEARCH SYSTEM", foreground="White", background="Red", font=font_subhead)
-    l4.place(x=505, y=40)
+    l4.pack()
+    b2= tk.Button(sc2, text='SEARCH BASED ON IMAGE', bg='#00FFFF', font=('courier', 12, 'normal'), command=search_img)
+    b2.place(x=47, y=247)
+    b3=tk.Button(sc2, text='SEARCH BASED ON NAME', bg='#00FFFF', font=('courier', 12, 'normal'), command=search_name).place(x=357, y=247)
+    b4=tk.Button(sc2, text='FILE NEW REPORT', bg='#00FFFF', font=('courier', 12, 'normal'), command=new_report).place(x=667, y=247)
+
 
 
 # Password forgot dialogues
@@ -144,5 +202,6 @@ tb2 = tk.Entry(show="*")
 tb2.place(x=595, y=375)
 b1 = tk.Button(text="SUBMIT", command=store, foreground="green")
 b1.place(x=631, y=410)
+
 welcome.mainloop()  # apparently this should end every window to print it in pycharm
 
