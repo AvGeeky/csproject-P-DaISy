@@ -2,22 +2,42 @@
 import random
 import tkinter as tk
 import smtplib
-from PIL import Image, ImageTk
+import PIL
+from PIL import ImageTk
 from tkinter.font import Font
 from tkinter.messagebox import _show
 
+import imghdr
+from tkinter import *
+from tkinter.filedialog import askopenfile
+import os
+import face_recognition
+import cv2
+import numpy as np
+from csv import reader, writer
+
 # Welcome screen, login details to be shifted into a file
 welcome = tk.Tk()
+#we need to refine this part and make it a csv file, another database
 usernames = ["Sai", "Ayushi"]
 passwords = ["123"]
 registered_email = ["saipranav.sai2005@gmail.com", "ayushi16055@gmail.com"]
 sixdig_pass = str(random.randint(100000, 999999))
 
+#Search based on image window
+def search_img():
+    print("")
+        #new window with two options(buttons), take a picture and upload a picture
+        #for button: take a picture
+        #camera_search()
+        #for button: upload a picture
+        #upload_search()
+        #function definitions added to the end
+
+
 
 # Database screen
 def screen2():
-    def search_img():
-        print("")
     def search_name():
         print("")
     def new_report():
@@ -25,7 +45,7 @@ def screen2():
             print("")
         # This is the section of code which creates a button
         tk.Button(sc2, text='SEARCH BASED ON IMAGE', bg='#00FFFF', font=('courier', 12, 'normal'),
-               command=search_name).place(x=47, y=247)
+               command=search_img).place(x=47, y=247)
 
         # This is the section of code which creates a button
         tk.Button(sc2, text='SEARCH BASED ON NAME', bg='#00FFFF', font=('courier', 12, 'normal'),
@@ -153,6 +173,91 @@ def store():
         _show('Unauthorized', 'Check the details you entered.')
         passwordreset()
 
+filepath=""
+found=False
+
+def upload_search():
+    uw = tk.Tk()
+    uw.geometry("700x350")
+    def open_file():
+        global filepath
+        file = tk.filedialog.askopenfile(mode='r', filetypes=[('All Files', '*.*')])
+        if file:
+            filepath = str(os.path.abspath(file.name))
+            #we can skip these steps
+            #need to add a label that shows the image saved in 'filepath'
+            #need to have a confirmation button that redirects to the searching page
+            img_search()
+            uw.destroy()
+    
+    l2=tk.Label(uw, text="Upload picture", font=('Georgia 13'))
+    l2.pack(pady=10)
+    tk.Button(uw, text="Browse", command=open_file).pack(pady=20)
+    uw.mainloop()
+
+def camera_search():
+    global filepath
+    camera = cv2.VideoCapture(0)
+    cv2.namedWindow("Capture an image")
+
+    while True:
+        ret, frame = camera.read()
+        if not ret:
+            print("Try Again")
+            break
+        cv2.imshow("Capture an image", frame)
+
+        key = cv2.waitKey(1)
+        if key%256 == 27:
+            # ESC pressed, closes the window--dont destroy previous window, overwrite it
+            break
+        elif key%256 == 32:
+            # SPACE pressed
+            filepath = "C:\\Users\\ayush\\Desktop\\CS project\\temporary_image\\imgcampture.jpg"
+            cv2.imwrite(filepath, frame)
+            break
+
+    camera.release()
+    cv2.destroyAllWindows()
+
+
+#image search
+def img_search():
+    global filepath
+    uimg = face_recognition.load_image_file(filepath)
+    u_encoding = face_recognition.face_encodings(uimg)[0]
+    #open database
+    f=open("policedatabase.csv","r")
+    rr=reader(f)
+    #need to exclude headers while checking
+    global found
+    MPIN=0
+    for i in rr:
+        if i[0]=='MPIN':
+            continue
+        else:
+            path=i[6]
+            cimg = face_recognition.load_image_file(path)
+            c_encoding = face_recognition.face_encodings(cimg)[0]
+            result = face_recognition.compare_faces([c_encoding], u_encoding)
+            #output of result is [boolean]
+            if True in result:
+                found=True
+                MPIN=i[0]
+                print(i)
+                #add details of i(MPIN stored in variable), search up based on MPIN and display as separate window
+                break
+    f.close()
+
+
+
+
+#if found:
+    #add function linking to next window where details are shown
+#else:
+    #try again popup box
+
+
 
 # FONTS
 font_head = Font(
@@ -172,8 +277,8 @@ u_name = Font(
     weight='bold',
 )
 # IMAGES
-intro_image = Image.open("folder.png")
-bg_img = Image.open("jurgen-jester-_PizUeTnvFE-unsplash.jpg")
+intro_image = PIL.Image.open("folder.png")
+bg_img = PIL.Image.open("jurgen-jester-_PizUeTnvFE-unsplash.jpg")
 size = (200, 200)
 size1 = (1920, 1280)
 intro_image = intro_image.resize(size)
