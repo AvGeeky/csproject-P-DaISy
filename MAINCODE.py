@@ -33,7 +33,7 @@ def img_search():
     uimg = face_recognition.load_image_file(filepath)
     u_encoding = face_recognition.face_encodings(uimg)[0]
     # open database
-    f = open("C:\\Users\\prana\\PycharmProjects\\csproject\\policedatabase", "r")
+    f = open("policedatabase.csv", "r")
     rr = reader(f)
     # need to exclude headers while checking
     global found
@@ -51,7 +51,6 @@ def img_search():
                 found = True
                 MPIN = i[0]
                 print(i)
-
                 # add details of i(MPIN stored in variable), search up based on MPIN and display as separate window
                 break
     f.close()
