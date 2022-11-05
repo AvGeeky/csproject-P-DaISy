@@ -26,6 +26,8 @@ sixdig_pass = str(random.randint(100000, 999999))
 
 filepath = ''
 found = False
+newpath=""
+MPINid=""
 
 # image search
 def img_search():
@@ -95,9 +97,6 @@ def upload_search():
         file = tk.filedialog.askopenfile(mode='r', filetypes=[('All Files', '*.*')])
         if file:
             filepath = str(os.path.abspath(file.name))
-            # we can skip these steps
-            # need to add a label that shows the image saved in 'filepath'
-            # need to have a confirmation button that redirects to the searching page
             uw.destroy()
             tk.Label(root, text="hold on, searching", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
             img_search()
@@ -168,46 +167,53 @@ def search_img():
         x=607, y=63)
     tk.Button(root, text='GO BACK', bg='#CD6600', font=('courier', 15, 'normal'), command=dest).place(x=387, y=273)
 
-        #new window with two options(buttons), take a picture and upload a picture
-        #for button: take a picture
-        #camera_search()
-        #for button: upload a picture
-        #upload_search()
-        #function definitions added to the end
 
 
 sc2=""
 # Database screen
 def screen2():
+    global filepath
+    global newpath
+    global MPINid
     global sc2
     def search_name():
         print("")
+
+    def upload_file():
+        file = tk.filedialog.askopenfile(mode='r', filetypes=[('All Files', '*.*')])
+        if file:
+            filepath = str(os.path.abspath(file.name))
+            img=cv2.imread(filepath)
+            f=open("policedatabase.csv","r")
+            rr=list(reader(f))
+            refid=rr[-1][0]
+            idnum=int(refid[2:])+1
+            MPINid="TN"+str(idnum)
+            newpath="C:\\Users\\ayush\\Desktop\\CS PROJECT\\MPIN_pictures\\"+MPINid+".jpg"
+            cv2.imwrite(newpath,img)
+            f.close()
+
     def new_report():
         def submit_missingreport(): #upon clicking submit
-            print("")
-        # This is the section of code which creates a button
-        tk.Button(sc2, text='SEARCH BASED ON IMAGE', bg='#00FFFF', font=('courier', 12, 'normal'),
-               command=search_img).place(x=47, y=247)
-
-        # This is the section of code which creates a button
-        tk.Button(sc2, text='SEARCH BASED ON NAME', bg='#00FFFF', font=('courier', 12, 'normal'),
-               command=search_name).place(x=357, y=247)
-
-        # This is the section of code which creates a button
-        tk.Button(sc2, text='FILE NEW REPORT', bg='#00FFFF', font=('courier', 12, 'normal'), command=new_report).place(
-            x=667, y=247)
-
+            f=open("policedatabase.csv","a")
+            wr=writer(f)
+            wr.writerow([MPINid,NAME,lastseentime,lastseenplace,contacts,info,newpath])
+            f.close()
+        
         # This is the section of code which creates a text input box
         NAME = tk.Entry(sc2)
         NAME.place(x=397, y=367)
 
         # This is the section of code which creates a text input box
-        lastseen = tk.Entry(sc2)
-        lastseen.place(x=397, y=407)
+        lastseentime = tk.Entry(sc2)
+        lastseentime.place(x=397, y=407)
 
         # This is the section of code which creates a text input box
         contacts = tk.Entry(sc2)
         contacts.place(x=397, y=487)
+
+        #WE NEED TO HAVE AN INPUT FOR PLACE OF LAST SEEN
+        lastseenplace=""
 
         # This is the section of code which creates a text input box
         info = tk.Entry(sc2)
@@ -229,6 +235,10 @@ def screen2():
         tk.Label(sc2, text='ADDITIONAL DETAILS', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=207, y=527)
         tk.Button(sc2, text='SUBMIT', bg='#7FFFD4', font=('verdana', 15, 'normal'), command=submit_missingreport).place(
             x=642, y=327)
+        
+        #Add button for uploading image next to the label
+        upload_file()
+
 
     sc2 = tk.Tk()
     welcome.destroy()
