@@ -51,6 +51,7 @@ def img_search():
                 found = True
                 MPIN = i[0]
                 print(i)
+
                 # add details of i(MPIN stored in variable), search up based on MPIN and display as separate window
                 break
     f.close()
@@ -97,8 +98,7 @@ def camera_search():
             # SPACE pressed
             filepath = "C:\\Users\\prana\\Desktop\\CS PROJECT\\temporary_image.jpg"
             cv2.imwrite(filepath, frame)
-
-
+            break
     camera.release()
     cv2.destroyAllWindows()
     img_search()
