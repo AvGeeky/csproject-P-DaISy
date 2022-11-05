@@ -3,7 +3,7 @@ import random
 import tkinter as tk
 import smtplib
 import PIL
-from PIL import ImageTk,Image
+from PIL import ImageTk
 from tkinter.font import Font
 from tkinter.messagebox import _show
 import imghdr
@@ -14,6 +14,7 @@ import face_recognition
 import cv2
 import numpy as np
 from csv import reader, writer
+import os
 
 # Welcome screen, login details to be shifted into a file
 welcome = tk.Tk()
@@ -60,11 +61,6 @@ def img_search():
                 sc2.geometry('888x584')
                 sc2.configure(background='#F0F8FF')
                 sc2.attributes('-topmost',True)
-                identity_img = PIL.Image.open(i[-1])
-                size3=(100,100)
-                identity_img = identity_img.resize(size3)
-                identity_image = ImageTk.PhotoImage(identity_img,master=sc2)
-                tk.Label(sc2, image=identity_image).pack()
 
                 # This is the section of code which creates the a label
                 tk.Label(sc2, text=i[0], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=216, y=275)
@@ -84,6 +80,7 @@ def img_search():
                 # This is the section of code which creates the a label
                 tk.Label(sc2, text=i[5], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=356,y=535)
                 root.destroy()
+
                 # add details of i(MPIN stored in variable), search up based on MPIN and display as separate window
                 break
     f.close()
@@ -113,9 +110,9 @@ def upload_search():
 
 
 def camera_search():
-    global filepath
+    global filepath,root
     camera = cv2.VideoCapture(0)
-    cv2.namedWindow("Capture an image")
+    cv2.namedWindow("Capture an image with Space, ESC to close.")
 
     while True:
         ret, frame = camera.read()
@@ -126,16 +123,21 @@ def camera_search():
 
         key = cv2.waitKey(1)
         if key % 256 == 27:
+            tk.Label(root, text="closed successfully", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
             # ESC pressed, closes the window--dont destroy previous window, overwrite it
             break
         elif key % 256 == 32:
+            tk.Label(root, text="loading", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
             # SPACE pressed
             filepath = "C:\\Users\\prana\\Desktop\\CS PROJECT\\temporary_image.jpg"
             cv2.imwrite(filepath, frame)
             break
+
     camera.release()
     cv2.destroyAllWindows()
     img_search()
+    os.remove("C:\\Users\\prana\\Desktop\\CS PROJECT\\temporary_image.jpg")
+    tk.Label(root, text="hold on, searching", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
 
 
 
