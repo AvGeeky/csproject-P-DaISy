@@ -3,7 +3,7 @@ import random
 import tkinter as tk
 import smtplib
 import PIL
-from PIL import ImageTk
+from PIL import ImageTk,Image
 from tkinter.font import Font
 from tkinter.messagebox import _show
 import imghdr
@@ -28,6 +28,8 @@ found = False
 
 # image search
 def img_search():
+    root.attributes('-topmost', True)
+    global sc2
     global filepath
     print(filepath)
     uimg = face_recognition.load_image_file(filepath)
@@ -48,10 +50,40 @@ def img_search():
             result = face_recognition.compare_faces([c_encoding], u_encoding)
             # output of result is [boolean]
             if True in result:
+                root.attributes('-topmost', False)
                 found = True
                 MPIN = i[0]
                 print(i)
+                sc2.destroy()
+                sc2=tk.Tk()
+                sc2.title("Database Section")
+                sc2.geometry('888x584')
+                sc2.configure(background='#F0F8FF')
+                sc2.attributes('-topmost',True)
+                identity_img = PIL.Image.open(i[-1])
+                size3=(100,100)
+                identity_img = identity_img.resize(size3)
+                identity_image = ImageTk.PhotoImage(identity_img,master=sc2)
+                tk.Label(sc2, image=identity_image).pack()
 
+                # This is the section of code which creates the a label
+                tk.Label(sc2, text=i[0], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=216, y=275)
+
+                # This is the section of code which creates the a label
+                tk.Label(sc2, text=i[1], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=416, y=275)
+
+                # This is the section of code which creates the a label
+                tk.Label(sc2, text=i[2], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=626, y=275)
+
+                # This is the section of code which creates the a label
+                tk.Label(sc2, text=i[3], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=416, y=375)
+
+                # This is the section of code which creates the a label
+                tk.Label(sc2, text=i[4], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=416, y=445)
+
+                # This is the section of code which creates the a label
+                tk.Label(sc2, text=i[5], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=356,y=535)
+                root.destroy()
                 # add details of i(MPIN stored in variable), search up based on MPIN and display as separate window
                 break
     f.close()
@@ -60,7 +92,7 @@ def upload_search():
     uw = tk.Tk()
     uw.lift()
     uw.geometry("700x350")
-
+    tk.Label(root, text="loading", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
     def open_file():
         global filepath
         file = tk.filedialog.askopenfile(mode='r', filetypes=[('All Files', '*.*')])
@@ -69,8 +101,10 @@ def upload_search():
             # we can skip these steps
             # need to add a label that shows the image saved in 'filepath'
             # need to have a confirmation button that redirects to the searching page
-            img_search()
             uw.destroy()
+            tk.Label(root, text="hold on, searching", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
+            img_search()
+
 
     l2 = tk.Label(uw, text="Upload picture", font=('Georgia 13'))
     l2.pack(pady=10)
@@ -110,9 +144,12 @@ def camera_search():
 # else:
 # try again popup box
 
-
+root=''
 #Search based on image window
 def search_img():
+    global root
+    def dest():
+        root.destroy()
     root=tk.Tk()
     root.lift()
     root.title("Search Window")
@@ -127,6 +164,7 @@ def search_img():
     # This is the section of code which creates a button
     tk.Button(root, text='UPLOAD A PICTURE', bg='#BCEE68', font=('courier', 12, 'normal'), command=upload_search).place(
         x=607, y=63)
+    tk.Button(root, text='GO BACK', bg='#CD6600', font=('courier', 15, 'normal'), command=dest).place(x=387, y=273)
 
         #new window with two options(buttons), take a picture and upload a picture
         #for button: take a picture
@@ -136,9 +174,10 @@ def search_img():
         #function definitions added to the end
 
 
-
+sc2=""
 # Database screen
 def screen2():
+    global sc2
     def search_name():
         print("")
     def new_report():
