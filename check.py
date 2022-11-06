@@ -203,7 +203,7 @@ def screen2():
             idnum = int(refid[2:]) + 1
             MPINid = "TN" + str(idnum)
             print(MPINid)
-            newpath = "CS PROJECT\\MPIN_pictures" + MPINid + ".jpg"
+            newpath = "MPIN_pictures\\" + MPINid + ".jpg"
             cv2.imwrite(newpath, img)
             f.close()
             _show('IMAGE UPLOAD SUCCESSFUL', 'Please make a note of your MPIN ID-' + str(MPINid))

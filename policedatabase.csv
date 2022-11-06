@@ -1,12 +1,13 @@
-MPIN,Name,Last Seen(Date),Place,Contact,Additional information,Picture path
-TN1,Kylie Jenner,22-10-2020,Kanchipuram,99009900,Hallucinates as the president,C:\Users\prana\Desktop\CS PROJECT\MPIN_pictures\TN1.jpg
-TN2,Kanye West,,,,,C:\Users\prana\Desktop\CS PROJECT\MPIN_pictures\TN2.jpg
-TN3,Roger Federer,,,,,C:\Users\prana\Desktop\CS PROJECT\MPIN_pictures\TN3.jpg
-TN4,Cristiano Ronaldo,,,,,C:\Users\prana\Desktop\CS PROJECT\MPIN_pictures\TN4.jpg
-TN5,Lionel Messi,,,,,C:\Users\prana\Desktop\CS PROJECT\MPIN_pictures\TN5.jpg
-TN6,Tyler Perry,,,,,C:\Users\prana\Desktop\CS PROJECT\MPIN_pictures\TN6.jpg
-TN7,Neymar,,,,,C:\Users\prana\Desktop\CS PROJECT\MPIN_pictures\TN7.jpg
-TN8,Howard Stern,,,,,C:\Users\prana\Desktop\CS PROJECT\MPIN_pictures\TN8.jpg
-TN9,LeBron James,,,,,C:\Users\prana\Desktop\CS PROJECT\MPIN_pictures\TN9.jpg
-TN10,Dwayne Johnson,,,,,C:\Users\prana\Desktop\CS PROJECT\MPIN_pictures\TN10.jpg
-TN11,Taylor Swift,,,,,C:\Users\prana\Desktop\CS PROJECT\MPIN_pictures\TN11.jpgTN12,VIJAY,CHENNAI,9AM,RAJURAM,LOST NEAR CENTRAL,CS PROJECT\MPIN_pictures\TN12.jpg
+MPIN,Name,Last Seen(Date),Place,Contact,Additional information,Picture path,,,,,,,,
+TN1,Kylie Jenner,22-10-2020,Kanchipuram,99009900,Hallucinates as the president,MPIN_pictures\TN1.jpg,,,,,,,,
+TN2,Kanye West,,,,,MPIN_pictures\TN2.jpg,,,,,,,,
+TN3,Roger Federer,,,,,MPIN_pictures\TN3.jpg,,,,,,,,
+TN4,Cristiano Ronaldo,,,,,MPIN_pictures\TN4.jpg,,,,,,,,
+TN5,Lionel Messi,,,,,MPIN_pictures\TN5.jpg,,,,,,,,
+TN6,Tyler Perry,,,,,MPIN_pictures\TN6.jpg,,,,,,,,
+TN7,Neymar,,,,,MPIN_pictures\TN7.jpg,,,,,,,,
+TN8,Howard Stern,,,,,MPIN_pictures\TN8.jpg,,,,,,,,
+TN9,LeBron James,,,,,MPIN_pictures\TN9.jpg,,,,,,,,
+TN10,Dwayne Johnson,,,,,MPIN_pictures\TN10.jpg,,,,,,,,
+TN11,Taylor Swift,,,,,MPIN_pictures\TN11.jpgTN12,,,,,,,,
+TN12,Vijay,Chennai,9AM,"9933002200, Ram",Last seen near chennai central,MPIN_pictures\TN12.jpg,,,,,,,,
