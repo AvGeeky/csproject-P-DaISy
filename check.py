@@ -53,8 +53,7 @@ def img_search():
             try:
                 c_encoding = face_recognition.face_encodings(cimg)[0]
             except:
-                print("not found")
-                break
+                _show('WARNING','PERSON NOT FOUND IN DATABASE!')
             result = face_recognition.compare_faces([c_encoding], u_encoding)
             # output of result is [boolean]
             if True in result:
@@ -244,6 +243,10 @@ def screen2():
 
             b8_b = tk.Label(frame, text="ADDL.INFORMATION: "+info, fg="green")
             b8_b.pack(side=BOTTOM)
+
+
+            t_b = tk.Label(frame, text="LAST SEEN DATE TIME: "+lastseenplace, fg="green")
+            t_b.pack(side=BOTTOM)
 
             tk.Button(frame, text='CONFIRM', bg='#0EF4DF', font=('verdana', 10, 'normal'), command=confirm_submit).pack(
                 side=LEFT)
