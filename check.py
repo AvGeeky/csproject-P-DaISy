@@ -53,9 +53,10 @@ def img_search():
             try:
                 c_encoding = face_recognition.face_encodings(cimg)[0]
             except:
-                _show('WARNING','PERSON NOT FOUND IN DATABASE!')
+                continue
             result = face_recognition.compare_faces([c_encoding], u_encoding)
             # output of result is [boolean]
+
             if True in result:
                 root.attributes('-topmost', False)
                 found = True
