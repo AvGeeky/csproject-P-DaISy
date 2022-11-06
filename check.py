@@ -133,14 +133,14 @@ def camera_search():
         elif key % 256 == 32:
             tk.Label(root, text="loading", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
             # SPACE pressed
-            filepath = "C:\\Users\\prana\\Desktop\\CS PROJECT\\temporary_image.jpg"
+            filepath = "temporary_image.jpg"
             cv2.imwrite(filepath, frame)
             break
 
     camera.release()
     cv2.destroyAllWindows()
     img_search()
-    os.remove("C:\\Users\\prana\\Desktop\\CS PROJECT\\temporary_image.jpg")
+    os.remove("temporary_image.jpg")
     tk.Label(root, text="hold on, searching", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
 
 
@@ -203,7 +203,7 @@ def screen2():
             idnum = int(refid[2:]) + 1
             MPINid = "TN" + str(idnum)
             print(MPINid)
-            newpath = "C:\\Users\\prana\\Desktop\\CS PROJECT\\MPIN_pictures\\" + MPINid + ".jpg"
+            newpath = "CS PROJECT\\MPIN_pictures" + MPINid + ".jpg"
             cv2.imwrite(newpath, img)
             f.close()
             _show('IMAGE UPLOAD SUCCESSFUL', 'Please make a note of your MPIN ID-' + str(MPINid))
