@@ -263,7 +263,7 @@ def screen2():
         info = tk.Entry(sc2)
         info.place(x=397, y=527)
         tk.Label(sc2, text='FULL NAME', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=297, y=367)
-        tk.Label(sc2, text='LAST SEEN', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=297, y=407)
+        tk.Label(sc2, text='LAST SEEN PLACE', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=207, y=407)
         tk.Label(sc2, text='PICTURE', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=307, y=447)
         tk.Label(sc2, text='CONTACT(S)', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=287, y=487)
         tk.Label(sc2, text='ADDITIONAL DETAILS', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=207, y=527)
