@@ -16,8 +16,10 @@ import numpy as np
 from csv import reader, writer
 import os
 
+
 # Welcome screen, login details to be shifted into a file
 welcome = tk.Tk()
+
 # we need to refine this part and make it a csv file, another database
 usernames = ["1", "Ayushi"]
 passwords = ["1"]
@@ -26,8 +28,56 @@ sixdig_pass = str(random.randint(100000, 999999))
 
 filepath = ''
 found = False
-newpath = ""
-MPINid = ""
+newpath=""
+MPINid=""
+details=[]
+searchid=""
+
+def person_found():
+    global details
+    sc3 = tk.Tk()
+    sc3=tk.Toplevel()
+    sc3.title("Details of person")
+    sc3.geometry('888x584')
+    sc3.configure(background='#F0F8FF')
+    sc3.attributes('-topmost', True)
+
+    heading = Font(
+    family='Times New Roman',
+    size=15,
+    weight='bold',
+    ) 
+    text = Font(
+    family='Times New Roman',
+    size=14,
+    weight='normal'
+    )
+    
+    tk.Label(sc3, text="MPIN ID:", bg='#F0F8FF', font=(heading)).place(x=300, y=300)
+    tk.Label(sc3, text=details[0], bg='#F0F8FF', font=(text)).place(x=500, y=300)
+    tk.Label(sc3, text="Name:", bg='#F0F8FF', font=(heading)).place(x=300, y=330)
+    tk.Label(sc3, text=details[1], bg='#F0F8FF', font=(text)).place(x=500, y=330)
+    tk.Label(sc3, text="Last Seen(Time/Date):", bg='#F0F8FF', font=(heading)).place(x=300, y=360)
+    tk.Label(sc3, text=details[2], bg='#F0F8FF', font=(text)).place(x=500, y=360)
+    tk.Label(sc3, text="Last Seen(Place):", bg='#F0F8FF', font=(heading)).place(x=300, y=390)
+    tk.Label(sc3, text=details[3], bg='#F0F8FF', font=(text)).place(x=500, y=390)
+    tk.Label(sc3, text="Point of Contact:", bg='#F0F8FF', font=(heading)).place(x=300, y=420)
+    tk.Label(sc3, text=details[4], bg='#F0F8FF', font=(text)).place(x=500, y=420)
+    tk.Label(sc3, text="Additional Information:", bg='#F0F8FF', font=(heading)).place(x=300, y=450)
+    tk.Label(sc3, text=details[5], bg='#F0F8FF', font=(text)).place(x=500, y=450)
+
+    #load image of person
+    img = PIL.Image.open(details[6])
+    img.thumbnail((300, 250))
+    height=img.height
+    width=img.width
+    img.save("imgresized.gif")
+    imgcanvas= tk.Canvas(sc3, height=height, width=width)
+    picture_file = tk.PhotoImage(file = 'imgresized.gif')
+    imgcanvas.create_image(0, 0, anchor=NW, image=picture_file)
+    imgcanvas.place(x=310, y=29)
+
+    sc3.mainloop()
 
 
 # image search
@@ -35,14 +85,15 @@ def img_search():
     root.attributes('-topmost', True)
     global sc2
     global filepath
-    print(filepath)
+    global details
+    global found
+    found = False
     uimg = face_recognition.load_image_file(filepath)
     u_encoding = face_recognition.face_encodings(uimg)[0]
     # open database
     f = open("policedatabase.csv", "r")
     rr = reader(f)
     # need to exclude headers while checking
-    global found
     MPIN = 0
     for i in rr:
         if i[0] == 'MPIN':
@@ -52,45 +103,22 @@ def img_search():
             cimg = face_recognition.load_image_file(path)
             try:
                 c_encoding = face_recognition.face_encodings(cimg)[0]
-            except:
+                result = face_recognition.compare_faces([c_encoding], u_encoding)
+                # output of result is [boolean]
+                if True in result:
+                    root.attributes('-topmost', False)
+                    found = True
+                    MPIN = i[0]
+                    details=i
+                    break
+            except IndexError:
                 continue
-            result = face_recognition.compare_faces([c_encoding], u_encoding)
-            # output of result is [boolean]
-            if True in result:
-                root.attributes('-topmost', False)
-                found = True
-                MPIN = i[0]
-                print(i)
-                sc3 = tk.Tk()
-                sc3.title("Database Section")
-                sc3.geometry('888x584')
-                sc3.configure(background='#F0F8FF')
-                sc3.attributes('-topmost', True)
-
-                # This is the section of code which creates the a label
-                tk.Label(sc3, text=i[0], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=216, y=275)
-
-                # This is the section of code which creates the a label
-                tk.Label(sc3, text=i[1], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=416, y=275)
-
-                # This is the section of code which creates the a label
-                tk.Label(sc3, text=i[2], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=626, y=275)
-
-                # This is the section of code which creates the a label
-                tk.Label(sc3, text=i[3], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=416, y=375)
-
-                # This is the section of code which creates the a label
-                tk.Label(sc3, text=i[4], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=416, y=445)
-
-                # This is the section of code which creates the a label
-                tk.Label(sc3, text=i[5], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=356, y=535)
-                root.destroy()
-
-                # add details of i(MPIN stored in variable), search up based on MPIN and display as separate window
-                break
-
     f.close()
-
+    if found==True:
+        person_found()
+        #root.destroy()
+    if found==False:
+        _show('Search complete','Person not found in database')
 
 def upload_search():
     uw = tk.Tk()
@@ -99,29 +127,29 @@ def upload_search():
     tk.Label(root, text="loading", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
 
     def open_file():
-        global filepath
+        global filepath, root
         file = tk.filedialog.askopenfile(mode='r', filetypes=[('All Files', '*.*')])
         if file:
             filepath = str(os.path.abspath(file.name))
             uw.destroy()
             tk.Label(root, text="hold on, searching", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
             img_search()
+            root.destroy()
 
     l2 = tk.Label(uw, text="Upload picture", font=('Georgia 13'))
     l2.pack(pady=10)
     tk.Button(uw, text="Browse", command=open_file).pack(pady=20)
     uw.mainloop()
+    
 
 
 def camera_search():
     global filepath, root
     camera = cv2.VideoCapture(0)
-    cv2.namedWindow("Capture an image with Space, ESC to close.")
-
     while True:
         ret, frame = camera.read()
         if not ret:
-            print("Try Again")
+            _show('Error','Unable to capture image')
             break
         cv2.imshow("Capture an image", frame)
 
@@ -142,12 +170,7 @@ def camera_search():
     img_search()
     os.remove("temporary_image.jpg")
     tk.Label(root, text="hold on, searching", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
-
-
-# if found:
-# add function linking to next window where details are shown
-# else:
-# try again popup box
+    root.destroy()
 
 root = ''
 
@@ -173,6 +196,7 @@ def search_img():
     tk.Button(root, text='UPLOAD A PICTURE', bg='#BCEE68', font=('courier', 12, 'normal'), command=upload_search).place(
         x=607, y=63)
     tk.Button(root, text='GO BACK', bg='#CD6600', font=('courier', 15, 'normal'), command=dest).place(x=387, y=273)
+    
 
 
 sc2 = ""
@@ -185,8 +209,46 @@ def screen2():
     global MPINid
     global sc2
 
-    def search_name():
-        print("")
+    def submit_id():
+        global searchid, found, details
+        found=False
+        f = open("policedatabase.csv", "r")
+        rr = reader(f)
+        # need to exclude headers while checking
+        #some logical error, not running
+        for i in rr:
+            print(i)
+            if i[0]==searchid:
+                    found = True
+                    details=i
+                    print("found")
+                    break
+        f.close()
+        if found==True:
+            person_found()
+            #root.destroy()
+        if found==False:
+            _show('Search complete','Person not found in database')
+
+
+    def search_id():
+        sc3 = tk.Tk()
+        sc3.title("Search based on MPIN")
+        sc3.geometry('900x500')
+        sc3.attributes('-topmost', True)
+        sc3.configure(background='#F0F8FF')
+        l1 = tk.Label(sc3, text="Tamilnadu Police Data Management System", font=font_head, foreground="Blue", width=1280)
+        l1.pack()
+        l2 = tk.Label(sc3, text="MISSING PERSONS' SEARCH SYSTEM", foreground="White", background="Red", font=font_subhead)
+        l2.pack()
+        tk.Label(sc3, text="ENTER MPIN id:", bg='#F0F8FF').place(x=300, y=257)
+        id = tk.Entry(sc3)
+        id.place(x=430, y=257)
+        searchid=str(id.get())
+        b2 = tk.Button(sc3, text='SUBMIT', bg='#00FFFF', font=('courier', 12, 'normal'), command=submit_id)
+        b2.place(x=370, y=320)
+        
+        
 
     def upload_file():
         global MPINid, newpath
@@ -202,7 +264,6 @@ def screen2():
                     break
             idnum = int(refid[2:]) + 1
             MPINid = "TN" + str(idnum)
-            print(MPINid)
             newpath = "MPIN_pictures\\" + MPINid + ".jpg"
             cv2.imwrite(newpath, img)
             f.close()
@@ -219,11 +280,9 @@ def screen2():
                 global name1, lastseentime, contacts, lastseenplace, info, MPINid, newpath
                 f = open("policedatabase.csv", "a")
                 wr = writer(f)
-                print([MPINid,name1,lastseentime,lastseenplace,contacts,info,newpath])
                 wr.writerow([MPINid,name1,lastseentime,lastseenplace,contacts,info,newpath])
                 f.close()
-                aa="MPIN:"+str(MPINid)+"-NAME:"+str(name1)+"-LAST SEEN:"+str(lastseentime)+"-LAST SEEN PLACE:"+str(lastseenplace)+"-CONTACTS:"+str(contacts)+"-Information:"+str(info)
-                _show("SUCCESS","Please note"+aa)
+                _show("SUCCESS","Please note MPINid: "+str(MPINid))
                 screen2()
 
 
@@ -236,7 +295,7 @@ def screen2():
             b5_n = tk.Label(frame, text="NAME: "+name1, fg="green")
             b5_n.pack(side=BOTTOM)
 
-            b6_ = tk.Label(frame, text="LAST SEEN: "+lastseentime, fg="green")
+            b6_ = tk.Label(frame, text="LAST SEEN: "+lastseenplace, fg="green")
             b6_.pack(side=BOTTOM)
 
             b7_b = tk.Label(frame, text="CONTACTS: "+contacts, fg="green")
@@ -246,12 +305,12 @@ def screen2():
             b8_b.pack(side=BOTTOM)
 
 
-            t_b = tk.Label(frame, text="LAST SEEN DATE TIME: "+lastseenplace, fg="green")
+            t_b = tk.Label(frame, text="LAST SEEN DATE TIME: "+lastseentime, fg="green")
             t_b.pack(side=BOTTOM)
 
             tk.Button(frame, text='CONFIRM', bg='#0EF4DF', font=('verdana', 10, 'normal'), command=confirm_submit).pack(
                 side=LEFT)
-
+            #need to make changes to edit
             tk.Button(frame, text='EDIT', bg='#0EF4DF', font=('verdana', 10, 'normal'), command=new_report).pack(
                 side=LEFT)
 
@@ -267,11 +326,11 @@ def screen2():
         info = tk.Entry(sc2)
         info.place(x=397, y=527)
         tk.Label(sc2, text='FULL NAME', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=297, y=367)
-        tk.Label(sc2, text='LAST SEEN PLACE', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=207, y=407)
+        tk.Label(sc2, text='LAST SEEN TIME', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=207, y=407)
         tk.Label(sc2, text='PICTURE', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=307, y=447)
         tk.Label(sc2, text='CONTACT(S)', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=287, y=487)
         tk.Label(sc2, text='ADDITIONAL DETAILS', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=207, y=527)
-        tk.Label(sc2, text='LAST SEEN TIME', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=207, y=567)
+        tk.Label(sc2, text='LAST SEEN PLACE', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=207, y=567)
         tk.Button(sc2, text='SUBMIT', bg='#7FFFD4', font=('verdana', 15, 'normal'), command=submit_missingreport).place(x=642, y=447)
         tk.Button(sc2, text='UPLOAD IMAGE', bg='#0EF4DF', font=('verdana', 9, 'normal'), command=upload_file).place(x=397, y=447)
 
@@ -283,16 +342,17 @@ def screen2():
     sc2.configure(background='#F0F8FF')
     l1 = tk.Label(sc2, text="Tamilnadu Police Data Management System", font=font_head, foreground="Blue", width=1280)
     l1.pack()
-    l4 = tk.Label(sc2, text="CRIMINAL SEARCH SYSTEM", foreground="White", background="Red", font=font_subhead)
+    l4 = tk.Label(sc2, text="MISSING PERSONS' SEARCH SYSTEM", foreground="White", background="Red", font=font_subhead)
     l4.pack()
     b2 = tk.Button(sc2, text='SEARCH BASED ON IMAGE', bg='#00FFFF', font=('courier', 12, 'normal'), command=search_img)
     b2.place(x=47, y=247)
-    b3 = tk.Button(sc2, text='SEARCH BASED ON NAME', bg='#00FFFF', font=('courier', 12, 'normal'),
-                   command=search_name).place(x=357, y=247)
+    b3 = tk.Button(sc2, text='SEARCH BASED ON MPIN', bg='#00FFFF', font=('courier', 12, 'normal'),
+                   command=search_id).place(x=357, y=247)
     b4 = tk.Button(sc2, text='FILE NEW REPORT', bg='#00FFFF', font=('courier', 12, 'normal'), command=new_report).place(
         x=667, y=247)
     name1, lastseentime, contacts, lastseenplace, info="","","","",""
 
+    
 
 # Password forgot dialogues
 count = 2
@@ -382,13 +442,9 @@ u_name = Font(
     weight='bold',
 )
 # IMAGES
-intro_image = PIL.Image.open("folder.png")
 bg_img = PIL.Image.open("jurgen-jester-_PizUeTnvFE-unsplash.jpg")
-size = (200, 200)
 size1 = (1920, 1280)
-intro_image = intro_image.resize(size)
 bg_img = bg_img.resize(size1)
-policeimg = ImageTk.PhotoImage(intro_image)
 bgimg = ImageTk.PhotoImage(bg_img)
 
 # loginscreen
