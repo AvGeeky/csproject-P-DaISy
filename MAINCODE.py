@@ -18,7 +18,7 @@ import os
 
 # Welcome screen, login details to be shifted into a file
 welcome = tk.Tk()
-#we need to refine this part and make it a csv file, another database
+# we need to refine this part and make it a csv file, another database
 usernames = ["1", "Ayushi"]
 passwords = ["1"]
 registered_email = ["saipranav.sai2005@gmail.com", "ayushi16055@gmail.com"]
@@ -26,8 +26,9 @@ sixdig_pass = str(random.randint(100000, 999999))
 
 filepath = ''
 found = False
-newpath=""
-MPINid=""
+newpath = ""
+MPINid = ""
+
 
 # image search
 def img_search():
@@ -49,7 +50,11 @@ def img_search():
         else:
             path = i[6]
             cimg = face_recognition.load_image_file(path)
-            c_encoding = face_recognition.face_encodings(cimg)[0]
+            try:
+                c_encoding = face_recognition.face_encodings(cimg)[0]
+            except:
+                print("not found")
+                break
             result = face_recognition.compare_faces([c_encoding], u_encoding)
             # output of result is [boolean]
             if True in result:
@@ -57,41 +62,42 @@ def img_search():
                 found = True
                 MPIN = i[0]
                 print(i)
-                sc2.destroy()
-                sc2=tk.Tk()
-                sc2.title("Database Section")
-                sc2.geometry('888x584')
-                sc2.configure(background='#F0F8FF')
-                sc2.attributes('-topmost',True)
+                sc3 = tk.Tk()
+                sc3.title("Database Section")
+                sc3.geometry('888x584')
+                sc3.configure(background='#F0F8FF')
+                sc3.attributes('-topmost', True)
 
                 # This is the section of code which creates the a label
-                tk.Label(sc2, text=i[0], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=216, y=275)
+                tk.Label(sc3, text=i[0], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=216, y=275)
 
                 # This is the section of code which creates the a label
-                tk.Label(sc2, text=i[1], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=416, y=275)
+                tk.Label(sc3, text=i[1], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=416, y=275)
 
                 # This is the section of code which creates the a label
-                tk.Label(sc2, text=i[2], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=626, y=275)
+                tk.Label(sc3, text=i[2], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=626, y=275)
 
                 # This is the section of code which creates the a label
-                tk.Label(sc2, text=i[3], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=416, y=375)
+                tk.Label(sc3, text=i[3], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=416, y=375)
 
                 # This is the section of code which creates the a label
-                tk.Label(sc2, text=i[4], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=416, y=445)
+                tk.Label(sc3, text=i[4], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=416, y=445)
 
                 # This is the section of code which creates the a label
-                tk.Label(sc2, text=i[5], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=356,y=535)
+                tk.Label(sc3, text=i[5], bg='#F0F8FF', font=('arial', 12, 'normal')).place(x=356, y=535)
                 root.destroy()
 
                 # add details of i(MPIN stored in variable), search up based on MPIN and display as separate window
                 break
     f.close()
 
+
 def upload_search():
     uw = tk.Tk()
     uw.lift()
     uw.geometry("700x350")
     tk.Label(root, text="loading", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
+
     def open_file():
         global filepath
         file = tk.filedialog.askopenfile(mode='r', filetypes=[('All Files', '*.*')])
@@ -101,7 +107,6 @@ def upload_search():
             tk.Label(root, text="hold on, searching", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
             img_search()
 
-
     l2 = tk.Label(uw, text="Upload picture", font=('Georgia 13'))
     l2.pack(pady=10)
     tk.Button(uw, text="Browse", command=open_file).pack(pady=20)
@@ -109,7 +114,7 @@ def upload_search():
 
 
 def camera_search():
-    global filepath,root
+    global filepath, root
     camera = cv2.VideoCapture(0)
     cv2.namedWindow("Capture an image with Space, ESC to close.")
 
@@ -128,16 +133,15 @@ def camera_search():
         elif key % 256 == 32:
             tk.Label(root, text="loading", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
             # SPACE pressed
-            filepath = "C:\\Users\\ayush\\Desktop\\CS PROJECT\\temporary_image.jpg"
+            filepath = "C:\\Users\\prana\\Desktop\\CS PROJECT\\temporary_image.jpg"
             cv2.imwrite(filepath, frame)
             break
 
     camera.release()
     cv2.destroyAllWindows()
     img_search()
-    os.remove("C:\\Users\\ayush\\Desktop\\CS PROJECT\\temporary_image.jpg")
+    os.remove("C:\\Users\\prana\\Desktop\\CS PROJECT\\temporary_image.jpg")
     tk.Label(root, text="hold on, searching", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
-
 
 
 # if found:
@@ -145,18 +149,21 @@ def camera_search():
 # else:
 # try again popup box
 
-root=''
-#Search based on image window
+root = ''
+
+
+# Search based on image window
 def search_img():
     global root
+
     def dest():
         root.destroy()
-    root=tk.Tk()
+
+    root = tk.Tk()
     root.lift()
     root.title("Search Window")
     root.geometry('890x580')
     root.configure(background='#F0F8FF')
-
 
     # This is the section of code which creates a button
     tk.Button(root, text='TAKE A PICTURE', bg='#00EEEE', font=('courier', 12, 'normal'), command=camera_search).place(
@@ -168,92 +175,119 @@ def search_img():
     tk.Button(root, text='GO BACK', bg='#CD6600', font=('courier', 15, 'normal'), command=dest).place(x=387, y=273)
 
 
+sc2 = ""
 
-sc2=""
+
 # Database screen
 def screen2():
     global filepath
     global newpath
     global MPINid
     global sc2
+
     def search_name():
         print("")
 
     def upload_file():
+        global MPINid, newpath
         file = tk.filedialog.askopenfile(mode='r', filetypes=[('All Files', '*.*')])
         if file:
             filepath = str(os.path.abspath(file.name))
-            img=cv2.imread(filepath)
-            f=open("policedatabase.csv","r")
-            rr=list(reader(f))
-            refid=rr[-1][0]
-            idnum=int(refid[2:])+1
-            MPINid="TN"+str(idnum)
-            newpath="C:\\Users\\ayush\\Desktop\\CS PROJECT\\MPIN_pictures\\"+MPINid+".jpg"
-            cv2.imwrite(newpath,img)
+            img = cv2.imread(filepath)
+            f = open("C:\\Users\\prana\\PycharmProjects\\csproject\\policedatabase.csv", "r")
+            rr = list(reader(f))
+            for n in range(-1,-10,-1):
+                if rr[n]!=[]:
+                    refid = rr[n][0]
+                    break
+            idnum = int(refid[2:]) + 1
+            MPINid = "TN" + str(idnum)
+            print(MPINid)
+            newpath = "C:\\Users\\prana\\Desktop\\CS PROJECT\\MPIN_pictures\\" + MPINid + ".jpg"
+            cv2.imwrite(newpath, img)
             f.close()
+            _show('IMAGE UPLOAD SUCCESSFUL', 'Please make a note of your MPIN ID-' + str(MPINid))
 
     def new_report():
-        def submit_missingreport(): #upon clicking submit
-            f=open("policedatabase.csv","a")
-            wr=writer(f)
-            wr.writerow([MPINid,NAME,lastseentime,lastseenplace,contacts,info,newpath])
-            f.close()
-        
-        # This is the section of code which creates a text input box
-        NAME = tk.Entry(sc2)
-        NAME.place(x=397, y=367)
+        def submit_missingreport():  # upon clicking submit
+            sc2.state("zoomed")
+            sc2.resizable(width=1, height=1)
+            global name1, lastseentime, contacts, lastseenplace, info, MPINid, newpath
+            name1, lastseentime, contacts, lastseenplace, info = name1.get(), lastseentime.get(), contacts.get(), lastseenplace.get(), info.get()
 
-        # This is the section of code which creates a text input box
+            def confirm_submit():
+                global name1, lastseentime, contacts, lastseenplace, info, MPINid, newpath
+                f = open("policedatabase.csv", "a")
+                wr = writer(f)
+                print([MPINid,name1,lastseentime,lastseenplace,contacts,info,newpath])
+                wr.writerow([MPINid,name1,lastseentime,lastseenplace,contacts,info,newpath])
+                f.close()
+                aa="MPIN:"+str(MPINid)+"-NAME:"+str(name1)+"-LAST SEEN:"+str(lastseentime)+"-LAST SEEN PLACE:"+str(lastseenplace)+"-CONTACTS:"+str(contacts)+"-Information:"+str(info)
+                _show("SUCCESS","Please note"+aa)
+                screen2()
+
+
+            frame = Frame(sc2)
+            frame.pack(side=RIGHT)
+
+            b4_ = tk.Label(frame, text="MPIN: "+MPINid, fg="green")
+            b4_.pack(side=BOTTOM)
+
+            b5_n = tk.Label(frame, text="NAME: "+name1, fg="green")
+            b5_n.pack(side=BOTTOM)
+
+            b6_ = tk.Label(frame, text="LAST SEEN: "+lastseentime, fg="green")
+            b6_.pack(side=BOTTOM)
+
+            b7_b = tk.Label(frame, text="CONTACTS: "+contacts, fg="green")
+            b7_b.pack(side=BOTTOM)
+
+            b8_b = tk.Label(frame, text="ADDL.INFORMATION: "+info, fg="green")
+            b8_b.pack(side=BOTTOM)
+
+            tk.Button(frame, text='CONFIRM', bg='#0EF4DF', font=('verdana', 10, 'normal'), command=confirm_submit).pack(
+                side=LEFT)
+
+            tk.Button(frame, text='EDIT', bg='#0EF4DF', font=('verdana', 10, 'normal'), command=new_report).pack(
+                side=LEFT)
+
+        global name1, lastseentime, contacts, lastseenplace, info
+        name1 = tk.Entry(sc2)
+        name1.place(x=397, y=367)
         lastseentime = tk.Entry(sc2)
         lastseentime.place(x=397, y=407)
-
-        # This is the section of code which creates a text input box
         contacts = tk.Entry(sc2)
         contacts.place(x=397, y=487)
-
-        #WE NEED TO HAVE AN INPUT FOR PLACE OF LAST SEEN
-        lastseenplace=""
-
-        # This is the section of code which creates a text input box
+        lastseenplace = tk.Entry(sc2)
+        lastseenplace.place(x=397, y=567)
         info = tk.Entry(sc2)
         info.place(x=397, y=527)
-
-        # This is the section of code which creates the a Label
         tk.Label(sc2, text='FULL NAME', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=297, y=367)
-
-        # This is the section of code which creates the a Label
         tk.Label(sc2, text='LAST SEEN', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=297, y=407)
-
-        # This is the section of code which creates the a Label
         tk.Label(sc2, text='PICTURE', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=307, y=447)
-
-        # This is the section of code which creates the a Label
         tk.Label(sc2, text='CONTACT(S)', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=287, y=487)
-
-        # This is the section of code which creates the a Label
         tk.Label(sc2, text='ADDITIONAL DETAILS', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=207, y=527)
-        tk.Button(sc2, text='SUBMIT', bg='#7FFFD4', font=('verdana', 15, 'normal'), command=submit_missingreport).place(
-            x=642, y=327)
-        
-        #Add button for uploading image next to the label
-        upload_file()
-
+        tk.Label(sc2, text='LAST SEEN TIME', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=207, y=567)
+        tk.Button(sc2, text='SUBMIT', bg='#7FFFD4', font=('verdana', 15, 'normal'), command=submit_missingreport).place(x=642, y=447)
+        tk.Button(sc2, text='UPLOAD IMAGE', bg='#0EF4DF', font=('verdana', 9, 'normal'), command=upload_file).place(x=397, y=447)
 
     sc2 = tk.Tk()
     welcome.destroy()
     sc2.title("Database Section")
-    sc2.geometry('888x584')
+    sc2.geometry('900x650')
+    sc2.resizable(width=0, height=1)
     sc2.configure(background='#F0F8FF')
     l1 = tk.Label(sc2, text="Tamilnadu Police Data Management System", font=font_head, foreground="Blue", width=1280)
     l1.pack()
     l4 = tk.Label(sc2, text="CRIMINAL SEARCH SYSTEM", foreground="White", background="Red", font=font_subhead)
     l4.pack()
-    b2= tk.Button(sc2, text='SEARCH BASED ON IMAGE', bg='#00FFFF', font=('courier', 12, 'normal'), command=search_img)
+    b2 = tk.Button(sc2, text='SEARCH BASED ON IMAGE', bg='#00FFFF', font=('courier', 12, 'normal'), command=search_img)
     b2.place(x=47, y=247)
-    b3=tk.Button(sc2, text='SEARCH BASED ON NAME', bg='#00FFFF', font=('courier', 12, 'normal'), command=search_name).place(x=357, y=247)
-    b4=tk.Button(sc2, text='FILE NEW REPORT', bg='#00FFFF', font=('courier', 12, 'normal'), command=new_report).place(x=667, y=247)
-
+    b3 = tk.Button(sc2, text='SEARCH BASED ON NAME', bg='#00FFFF', font=('courier', 12, 'normal'),
+                   command=search_name).place(x=357, y=247)
+    b4 = tk.Button(sc2, text='FILE NEW REPORT', bg='#00FFFF', font=('courier', 12, 'normal'), command=new_report).place(
+        x=667, y=247)
+    name1, lastseentime, contacts, lastseenplace, info="","","","",""
 
 
 # Password forgot dialogues
@@ -326,7 +360,6 @@ def store():
         passwordreset()
 
 
-
 # FONTS
 font_head = Font(
     family='Garmond',
@@ -377,4 +410,3 @@ b1 = tk.Button(text="SUBMIT", command=store, foreground="green")
 b1.place(x=631, y=410)
 
 welcome.mainloop()  # apparently this should end every window to print it in pycharm
-
