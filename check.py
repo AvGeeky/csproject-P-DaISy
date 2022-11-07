@@ -96,9 +96,9 @@ def img_search():
     # need to exclude headers while checking
     MPIN = 0
     for i in rr:
-        if i[0] == 'MPIN':
+        if i!=[] and i[0] == 'MPIN':
             continue
-        else:
+        elif i!=[]:
             path = i[6]
             cimg = face_recognition.load_image_file(path)
             try:
@@ -134,7 +134,7 @@ def upload_search():
             uw.destroy()
             tk.Label(root, text="hold on, searching", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
             img_search()
-            root.destroy()
+
 
     l2 = tk.Label(uw, text="Upload picture", font=('Georgia 13'))
     l2.pack(pady=10)
@@ -169,7 +169,7 @@ def camera_search():
     cv2.destroyAllWindows()
     img_search()
     os.remove("temporary_image.jpg")
-    tk.Label(root, text="hold on, searching", bg='#F0F8FF', font=('arial', 15, 'normal')).pack()
+    tk.Label(root, text="hold on, searching", bg='#F0F8FF', font=('courier', 15, 'normal')).pack()
     root.destroy()
 
 root = ''
@@ -198,9 +198,9 @@ def search_img():
     tk.Button(root, text='GO BACK', bg='#CD6600', font=('courier', 15, 'normal'), command=dest).place(x=387, y=273)
     
 
-
+ids=""
 sc2 = ""
-
+sc4=""
 
 # Database screen
 def screen2():
@@ -209,43 +209,48 @@ def screen2():
     global MPINid
     global sc2
 
+
     def submit_id():
-        global searchid, found, details
+        global details
         found=False
+
+        global ids,sc4
+        searchid=ids.get()
         f = open("policedatabase.csv", "r")
         rr = reader(f)
         # need to exclude headers while checking
         #some logical error, not running
         for i in rr:
-            print(i)
-            if i[0]==searchid:
-                    found = True
-                    details=i
-                    print("found")
-                    break
+            if i!=[]:
+
+                if str(i[0]).upper()==str(searchid).upper():
+                        found = True
+                        details=i
+                        print("found")
+                        break
         f.close()
         if found==True:
             person_found()
-            #root.destroy()
+
         if found==False:
             _show('Search complete','Person not found in database')
 
 
     def search_id():
-        sc3 = tk.Tk()
-        sc3.title("Search based on MPIN")
-        sc3.geometry('900x500')
-        sc3.attributes('-topmost', True)
-        sc3.configure(background='#F0F8FF')
-        l1 = tk.Label(sc3, text="Tamilnadu Police Data Management System", font=font_head, foreground="Blue", width=1280)
+        global ids,details,sc4
+        sc4 = tk.Tk()
+        sc4.title("Search based on MPIN")
+        sc4.geometry('900x500')
+        sc4.attributes('-topmost', True)
+        sc4.configure(background='#F0F8FF')
+        l1 = tk.Label(sc4, text="Tamilnadu Police Data Management System", font=font_head, foreground="Blue", width=1280)
         l1.pack()
-        l2 = tk.Label(sc3, text="MISSING PERSONS' SEARCH SYSTEM", foreground="White", background="Red", font=font_subhead)
+        l2 = tk.Label(sc4, text="MISSING PERSONS' SEARCH SYSTEM", foreground="White", background="Red", font=font_subhead)
         l2.pack()
-        tk.Label(sc3, text="ENTER MPIN id:", bg='#F0F8FF').place(x=300, y=257)
-        id = tk.Entry(sc3)
-        id.place(x=430, y=257)
-        searchid=str(id.get())
-        b2 = tk.Button(sc3, text='SUBMIT', bg='#00FFFF', font=('courier', 12, 'normal'), command=submit_id)
+        tk.Label(sc4, text="ENTER MPIN id:", bg='#F0F8FF').place(x=300, y=257)
+        ids = tk.Entry(sc4)
+        ids.place(x=430, y=257)
+        b2 = tk.Button(sc4, text='SUBMIT', bg='#00FFFF', font=('courier', 12, 'normal'), command=submit_id)
         b2.place(x=370, y=320)
         
         
@@ -282,9 +287,8 @@ def screen2():
                 wr = writer(f)
                 wr.writerow([MPINid,name1,lastseentime,lastseenplace,contacts,info,newpath])
                 f.close()
-                _show("SUCCESS","Please note MPINid: "+str(MPINid))
-                screen2()
-
+                _show("SUCCESS","You can close this window successfully.")
+                new_report()
 
             frame = Frame(sc2)
             frame.pack(side=RIGHT)
