@@ -7,6 +7,7 @@ from PIL import ImageTk
 from tkinter.font import Font
 from tkinter.messagebox import _show
 import imghdr
+from tktimepicker import AnalogPicker, AnalogThemes, constants
 from tkinter import *
 from tkinter.filedialog import askopenfile
 import os
@@ -15,6 +16,7 @@ import cv2
 import numpy as np
 from csv import reader, writer
 import os
+from tkcalendar import Calendar, DateEntry
 
 
 # Welcome screen, login details to be shifted into a file
@@ -202,6 +204,43 @@ ids=""
 sc2 = ""
 sc4=""
 
+cal1=''
+date=''
+time1=''
+timelabel=''
+
+def calen():
+    def grad_date():
+        global date
+        date = cal.get_date()
+        date_label=tk.Label(sc2, text=date, bg='#F0F8FF', font=('verdana', 8, 'normal')).place(x=577, y=407)
+        top1.destroy()
+    top1 = tk.Toplevel(sc2)
+    cal = Calendar(top1, selectmode='day',year=2020, month=5,day=22)
+    cal.pack(side=TOP)
+    tk.Button(top1, text="Get Date",command=grad_date).pack(side=BOTTOM, pady=20)
+def timez():
+    def updateTime():
+        global time1
+        time_tem=time_picker.time()
+        top.destroy()
+        for i in time_tem:
+            time1+=str(i)
+        time_label=tk.Label(sc2, text=time1, bg='#F0F8FF', font=('verdana', 8, 'normal')).place(x=637, y=407)
+
+    top = tk.Toplevel(sc2)
+
+    time_picker = AnalogPicker(top, type=constants.HOURS12)
+    time_picker.pack(expand=True, fill="both")
+    theme = AnalogThemes(time_picker)
+    theme.setDracula()
+    #theme.setNavyBlue()
+    #theme.setPurple() #to change theme
+    ok_btn = tk.Button(top, text="ok", command=updateTime)
+    ok_btn.pack()
+
+
+
 # Database screen
 def screen2():
     global filepath
@@ -275,20 +314,26 @@ def screen2():
             _show('IMAGE UPLOAD SUCCESSFUL', 'Please make a note of your MPIN ID-' + str(MPINid))
 
     def new_report():
+
         def submit_missingreport():  # upon clicking submit
             sc2.state("zoomed")
             sc2.resizable(width=1, height=1)
-            global name1, lastseentime, contacts, lastseenplace, info, MPINid, newpath
-            name1, lastseentime, contacts, lastseenplace, info = name1.get(), lastseentime.get(), contacts.get(), lastseenplace.get(), info.get()
+            global name1, contacts, lastseenplace, info, MPINid, newpath, time1, date, lastseentime
+            lastseentime = str(time1)+" "+str(date)
+            name1, lastseentime, contacts, lastseenplace, info = name1.get(), lastseentime, contacts.get(), lastseenplace.get(), info.get()
 
             def confirm_submit():
+                global date_label, time_label
                 global name1, lastseentime, contacts, lastseenplace, info, MPINid, newpath
                 f = open("policedatabase.csv", "a")
                 wr = writer(f)
                 wr.writerow([MPINid,name1,lastseentime,lastseenplace,contacts,info,newpath])
                 f.close()
                 _show("SUCCESS","You can close this window successfully.")
+
                 new_report()
+
+
 
             frame = Frame(sc2)
             frame.pack(side=RIGHT)
@@ -318,11 +363,11 @@ def screen2():
             tk.Button(frame, text='EDIT', bg='#0EF4DF', font=('verdana', 10, 'normal'), command=new_report).pack(
                 side=LEFT)
 
-        global name1, lastseentime, contacts, lastseenplace, info
+        global name1, lastseentime, contacts, lastseenplace, info, time1
         name1 = tk.Entry(sc2)
         name1.place(x=397, y=367)
-        lastseentime = tk.Entry(sc2)
-        lastseentime.place(x=397, y=407)
+        tk.Button(sc2, text='OPEN CALENDER', bg='#7FFFD4', font=('courier', 9, 'normal'),command=calen).place(x=397, y=407)
+        tk.Button(sc2, text='TIME', bg='#7FFFD4', font=('courier', 9, 'normal'), command=timez).place(x=527,y=407)
         contacts = tk.Entry(sc2)
         contacts.place(x=397, y=487)
         lastseenplace = tk.Entry(sc2)
@@ -330,13 +375,14 @@ def screen2():
         info = tk.Entry(sc2)
         info.place(x=397, y=527)
         tk.Label(sc2, text='FULL NAME', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=297, y=367)
-        tk.Label(sc2, text='LAST SEEN TIME', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=207, y=407)
+        tk.Label(sc2, text='LAST SEEN DATE/TIME', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=197, y=407)
         tk.Label(sc2, text='PICTURE', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=307, y=447)
         tk.Label(sc2, text='CONTACT(S)', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=287, y=487)
         tk.Label(sc2, text='ADDITIONAL DETAILS', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=207, y=527)
         tk.Label(sc2, text='LAST SEEN PLACE', bg='#F0F8FF', font=('verdana', 12, 'normal')).place(x=207, y=567)
-        tk.Button(sc2, text='SUBMIT', bg='#7FFFD4', font=('verdana', 15, 'normal'), command=submit_missingreport).place(x=642, y=447)
+        tk.Button(sc2, text='SUBMIT', bg='#7FFFD4', font=('verdana', 15, 'normal'), command=submit_missingreport).place(x=662, y=447)
         tk.Button(sc2, text='UPLOAD IMAGE', bg='#0EF4DF', font=('verdana', 9, 'normal'), command=upload_file).place(x=397, y=447)
+
 
     sc2 = tk.Tk()
     welcome.destroy()

@@ -1,3 +1,9 @@
-# le_csproject-2904
+Labels for date in the folder and making leads for them which you can validate. Then combine them and put it under the existing subdivision in the CSV file for our ease. Displaying can be in the existing format just inputting can be fixed
 
-left as on 13:53 5th november, reporting and updating option if it finda a person, person not found, search based on name and file a new report connection to csv file. filing new report-submit button needs to be defined, picture upload button
+2, wait I'll see, I'll do
+
+3. Will look at
+
+4 put off till we do SQL properly
+
+5,6,7 do
