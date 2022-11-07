@@ -7,7 +7,6 @@ from PIL import ImageTk
 from tkinter.font import Font
 from tkinter.messagebox import _show
 import imghdr
-from tktimepicker import AnalogPicker, AnalogThemes, constants
 from tkinter import *
 from tkinter.filedialog import askopenfile
 import os
@@ -17,6 +16,7 @@ import numpy as np
 from csv import reader, writer
 import os
 from tkcalendar import Calendar, DateEntry
+from tktimepicker import AnalogPicker, AnalogThemes, constants
 
 
 # Welcome screen, login details to be shifted into a file
