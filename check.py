@@ -17,6 +17,7 @@ from csv import reader, writer
 import os
 from tkcalendar import Calendar, DateEntry
 from tktimepicker import AnalogPicker, AnalogThemes, constants
+from datetime import date
 
 
 # Welcome screen, login details to be shifted into a file
@@ -205,27 +206,45 @@ sc2 = ""
 sc4=""
 
 cal1=''
-date=''
+udate=''
 time1=''
 timelabel=''
 
 def calen():
     def grad_date():
-        global date
-        date = cal.get_date()
-        date_label=tk.Label(sc2, text=date, bg='#F0F8FF', font=('verdana', 8, 'normal')).place(x=577, y=407)
+        global udate
+        udate = cal.get_date()
+        dlist=udate.split("/")
+        if dlist[2]>cdlist[2]:
+            calen()
+            _show('Error','Invalid date')
+        elif (dlist[2]==cdlist[2] and dlist[0]>cdlist[0]) or (dlist[2]==cdlist[2] and dlist[0]==cdlist[0] and dlist[1]>cdlist[1]):
+            calen()
+            _show('Error','Invalid date')
+        else:
+            date_label=tk.Label(sc2, text=udate, bg='#F0F8FF', font=('verdana', 8, 'normal')).place(x=577, y=407)
         top1.destroy()
+    today = date.today()
+    d1 = today.strftime("%m/%d/%y")
+    cdlist=d1.split("/")
+    cdate=int(cdlist[1])
+    cyear=int(cdlist[2])
+    cmonth=int(cdlist[0])
     top1 = tk.Toplevel(sc2)
-    cal = Calendar(top1, selectmode='day',year=2020, month=5,day=22)
+    cal = Calendar(top1, selectmode='day',year=cyear, month=cmonth,day=cdate)
     cal.pack(side=TOP)
     tk.Button(top1, text="Get Date",command=grad_date).pack(side=BOTTOM, pady=20)
+
 def timez():
     def updateTime():
         global time1
         time_tem=time_picker.time()
         top.destroy()
-        for i in time_tem:
-            time1+=str(i)
+        for i in range(len(time_tem)):
+            if i==0:
+               time1+=str(time_tem[i])+":"
+            else:
+                time1+=str(time_tem[i])
         time_label=tk.Label(sc2, text=time1, bg='#F0F8FF', font=('verdana', 8, 'normal')).place(x=637, y=407)
 
     top = tk.Toplevel(sc2)
