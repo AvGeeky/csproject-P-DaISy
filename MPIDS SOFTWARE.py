@@ -208,11 +208,9 @@ def search_img():
     root.geometry('890x580')
     root.configure(background='#F0F8FF')
 
-    # This is the section of code which creates a button
     tk.Button(root, text='TAKE A PICTURE', bg='#00EEEE', font=('courier', 12, 'normal'), command=camera_search).place(
         x=107, y=63)
 
-    # This is the section of code which creates a button
     tk.Button(root, text='UPLOAD A PICTURE', bg='#BCEE68', font=('courier', 12, 'normal'), command=upload_search).place(
         x=607, y=63)
     tk.Button(root, text='GO BACK', bg='#CD6600', font=('courier', 15, 'normal'), command=dest).place(x=387, y=273)
@@ -387,7 +385,6 @@ def screen2():
 
             tk.Button(frame, text='CONFIRM', bg='#0EF4DF', font=('verdana', 10, 'normal'), command=confirm_submit).pack(
                 side=LEFT)
-            #need to make changes to edit
             tk.Button(frame, text='EDIT', bg='#0EF4DF', font=('verdana', 10, 'normal'), command=new_report).pack(
                 side=LEFT)
 
@@ -540,7 +537,6 @@ limg.pack()
 l1 = tk.Label(welcome, text="Tamilnadu Police Data Management System", font=font_head, foreground="White",
               background="Red", width=1280)
 l1.pack()
-# similar to pack, place places it using coordinate system
 l4 = tk.Label(text="LOGIN", foreground='white', bg='blue', font=font_head, width=10)
 l4.place(x=540, y=185)
 l3 = tk.Label(text="USERNAME", foreground='green', bg="#5d8dac", font=u_name)
