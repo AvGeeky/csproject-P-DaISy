@@ -1,5 +1,5 @@
 # P-DaiSy - Police Database and Identification System
-A highly scalable facial recognition and information storage cum retrieval system designed to enhance the efficiency of law enforcement in tracking and managing missing persons and individuals with criminal histories.
+A highly scalable facial recognition and information storage & retrieval system designed to enhance the efficiency of law enforcement in tracking and managing missing persons and individuals with criminal histories.
 Made by [Saipranav M](https://github.com/AvGeeky) and [Ayushi Choudhary](https://github.com/ayushi16055) as part of their CBSE Class 12 Board Project.
 
 ## Table of Contents
